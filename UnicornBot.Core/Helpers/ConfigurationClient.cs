@@ -4,18 +4,18 @@ using UnicornBot.Core.Model;
 
 namespace UnicornBot.Core.Helpers
 {
-    public class ConfigurationClient
+    internal class ConfigurationClient
     {
         private readonly string _filePath;
 
-        public ConfigurationClient(string filePath)
+        internal ConfigurationClient(string filePath)
         {
             _filePath = filePath;
 
             if (!File.Exists(_filePath)) CreateConfig();
         }
 
-        public async Task<Config> LoadFromFileAsync()
+        internal async Task<Config> LoadFromFileAsync()
         {
             string configData;
 
@@ -32,7 +32,7 @@ namespace UnicornBot.Core.Helpers
             Config config = new()
             {
                 Token = "<insert your token here>",
-                Prefix = "$"
+                Prefix = '$'
             };
             string configData = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
 

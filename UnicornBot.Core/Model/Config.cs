@@ -8,6 +8,6 @@ namespace UnicornBot.Core.Model
         public string Token { get; set; }
 
         [JsonPropertyName("prefix")]
-        public string Prefix { get; set; }
+        public char Prefix { get; set; }
     }
 }
