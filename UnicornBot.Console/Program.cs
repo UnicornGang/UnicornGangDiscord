@@ -1,10 +1,13 @@
-﻿using System.Reflection;
+﻿using UnicornBot.Console.Helpers;
 using UnicornBot.Core;
-using UnicornBot.Core.Helpers;
+using UnicornBot.Core.Model;
 
-AppInfo appInfo = new();
-Console.Title = $"{appInfo.Title} v{appInfo.VersionShort}";
+Console.Title = $"{AppInfo.Title} v{AppInfo.VersionShort}";
 
-string configFile = Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, ".json");
+Config config = await new ConfigurationClient().LoadFromFileAsync();
 
-await new App(configFile).RunAsync();
+Bot bot = new(config);
+
+new Task(async () => await bot.ConnectAsync()).Start();
+
+do Console.ReadLine(); while (true);
