@@ -1,5 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Entities;
 using System.Reflection;
 
 namespace UnicornBot.Core.Commands;
@@ -24,6 +25,17 @@ public class Essentials : BaseCommandModule
     public async Task AboutAsync(CommandContext context)
     {
         string versionShort = string.Join(".", _version.Split('.').SkipLast(1));
+
         await context.Channel.SendMessageAsync($"{_name} v{versionShort}").ConfigureAwait(false);
+    }
+
+    [Command("invite")]
+    [Description("Displays the current invite link")]
+    public async Task CreateInviteAsync(CommandContext context)
+    {
+        DiscordChannel welcomeRoom = context.Guild.GetChannel(895214523068342283) ?? context.Channel;
+        DiscordInvite invite = await welcomeRoom.CreateInviteAsync(max_age: 0, max_uses: 0, temporary: true, unique: false);
+
+        await context.Channel.SendMessageAsync($"Invite link: https://discord.gg/{invite.Code}").ConfigureAwait(false);
     }
 }
