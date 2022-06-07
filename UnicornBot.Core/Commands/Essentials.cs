@@ -2,17 +2,18 @@
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using System.Reflection;
+using UnicornBot.Core.Attributes;
 
 namespace UnicornBot.Core.Commands;
 
+[Permissions(Permissions.PermissionType.User)]
 public class Essentials : BaseCommandModule
 {
     private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
     private readonly string _name = Path.GetFileNameWithoutExtension(_assembly.Location).Split('.')[0];
     private readonly string _version = (_assembly.GetName().Version ?? new Version("0")).ToString();
 
-    [Command("ping")]
-    [Description("Pings the bot")]
+    [Command("ping"), Description("Pings the bot")]
     public async Task Ping(CommandContext context)
     {
         string user = context.Member == null ? context.User.Mention : context.Member.Mention;
@@ -20,8 +21,7 @@ public class Essentials : BaseCommandModule
         await context.Channel.SendMessageAsync($"Pong, {user}!").ConfigureAwait(false);
     }
 
-    [Command("about")]
-    [Description("Displays information about the current build")]
+    [Command("about"), Description("Displays information about the current build")]
     public async Task AboutAsync(CommandContext context)
     {
         string versionShort = string.Join(".", _version.Split('.').SkipLast(1));
@@ -29,8 +29,7 @@ public class Essentials : BaseCommandModule
         await context.Channel.SendMessageAsync($"{_name} v{versionShort}").ConfigureAwait(false);
     }
 
-    [Command("invite")]
-    [Description("Displays the current invite link")]
+    [Command("invite"), Description("Displays the current invite link")]
     public async Task CreateInviteAsync(CommandContext context)
     {
         DiscordChannel welcomeRoom = context.Guild.GetChannel(895214523068342283) ?? context.Channel;

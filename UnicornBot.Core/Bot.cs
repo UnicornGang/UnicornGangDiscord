@@ -63,6 +63,8 @@ public class Bot
 
         commands.RegisterCommands(Assembly.GetExecutingAssembly());
 
+        commands.CommandErrored += Commands_CommandErrored;
+
         return Task.FromResult(commands);
     }
 
@@ -83,6 +85,15 @@ public class Bot
     private Task Client_ClientErrored(DiscordClient sender, ClientErrorEventArgs e)
     {
         sender.Logger.LogError(_botEventId, e.Exception, "An exception has occured.");
+
+        return Task.CompletedTask;
+    }
+
+    private Task Commands_CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
+    {
+        Client.Logger.LogTrace(_botEventId, e.Exception, "A command error has occured.");
+
+        e.Context.RespondAsync("Permission denied.");
 
         return Task.CompletedTask;
     }
