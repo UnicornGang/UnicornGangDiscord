@@ -2,6 +2,7 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 using UnicornBot.Core.Model;
 
 namespace UnicornBot.Core;
@@ -60,7 +61,7 @@ public class Bot
 
         CommandsNextExtension commands = Client.UseCommandsNext(commandsConfig);
 
-        commands.RegisterCommands<Commands.Essentials>();
+        commands.RegisterCommands(Assembly.GetExecutingAssembly());
 
         return Task.FromResult(commands);
     }
