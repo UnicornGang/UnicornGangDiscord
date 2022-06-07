@@ -11,6 +11,7 @@ public class Bot
     public DiscordClient Client { get; private set; }
     public CommandsNextExtension Commands { get; private set; }
     private readonly Config _config;
+    private readonly EventId _botEventId = new(420, "UnicornBot");
 
     public Bot(Config config)
     {
@@ -21,6 +22,8 @@ public class Bot
         Commands = RegisterCommands().Result;
 
         Client.Ready += Client_Ready;
+        Client.GuildAvailable += Client_GuildAvailable;
+        Client.ClientErrored += Client_ClientErrored;
     }
 
     public async Task ConnectAsync()
@@ -64,6 +67,22 @@ public class Bot
 
     private Task Client_Ready(DiscordClient sender, ReadyEventArgs e)
     {
+        sender.Logger.LogInformation(_botEventId, "Bot started.");
+
+        return Task.CompletedTask;
+    }
+
+    private Task Client_GuildAvailable(DiscordClient sender, GuildCreateEventArgs e)
+    {
+        sender.Logger.LogInformation(_botEventId, "Connected to '{Guild Name}'.", e.Guild.Name);
+
+        return Task.CompletedTask;
+    }
+
+    private Task Client_ClientErrored(DiscordClient sender, ClientErrorEventArgs e)
+    {
+        sender.Logger.LogError(_botEventId, e.Exception, "An exception has occured.");
+
         return Task.CompletedTask;
     }
 }
