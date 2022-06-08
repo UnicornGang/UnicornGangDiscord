@@ -1,11 +1,11 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using UnicornBot.Core.Attributes;
+using UnicornBot.Core.Helpers;
 
 namespace UnicornBot.Core.Commands;
 
-[Permissions(Permissions.PermissionType.User)]
+[RequireRoles(RoleCheckMode.Any, "Admin", "Administrator", "Tester")]
 public class Debugging : BaseCommandModule
 {
     [Command("debug::permissions"), Description("Shows permissions")]
@@ -23,6 +23,6 @@ public class Debugging : BaseCommandModule
     [Command("debug::isAdmin")]
     public async Task IsAdmin(CommandContext context)
     {
-        await context.RespondAsync(Permissions.IsAdministrator(context.Member).ToString());
+        await context.RespondAsync(Internal.IsAdministrator(context.Member).ToString());
     }
 }
