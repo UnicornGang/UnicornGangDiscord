@@ -1,7 +1,5 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.EventArgs;
 using Microsoft.Extensions.Logging;
 
@@ -35,18 +33,8 @@ internal class EventHandlers
 
     internal static async Task Commands_CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
     {
-        sender.Client.Logger.LogTrace(_botEventId, e.Exception, "A command error has occured.");
+        sender.Client.Logger.LogTrace(_botEventId, "A command ({Command}) from {User} raised an exception: {Exception}.", e.Context.RawArgumentString, e.Context.User.Username, e.Exception.Message);
 
-        IReadOnlyList<CheckBaseAttribute> failedChecks = ((ChecksFailedException)e.Exception).FailedChecks;
-
-        foreach (CheckBaseAttribute failedCheck in failedChecks)
-        {
-            string msg = failedCheck switch
-            {
-                _ => $"An unknown error has occured:\r\n{e.Exception}",
-            };
-
-            await e.Context.RespondAsync(msg).ConfigureAwait(false);
-        }
+        await e.Context.RespondAsync(e.Exception.Message).ConfigureAwait(false);
     }
 }
